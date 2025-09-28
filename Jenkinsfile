@@ -1,5 +1,10 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_IMAGE = "gfgbatch38flaskapp"
+        DOCKER_REGISTRY = "psrv3"  // Replace with your Docker Hub username
+        IMAGE_TAG = "${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+    }    
 
     stages {
         stage('Checkout') {
@@ -30,11 +35,25 @@ pipeline {
         }
         stage('Build docker image') {
             steps {
+                // script {
+                //     // Build the Docker image
+                //     //docker.build("${IMAGE_TAG}")
+                    
+                // }
+                sh 'docker build -t ${IMAGE_TAG} .'
                 echo 'Build docker image done successfully'
             }
         }
+        stage('Login to docker hub') {
+            steps {
+                withCredentials([string(credentialsId: 'dockerhubpwd', variable: 'dockerhubpwd')]) {
+                sh 'docker login -u psrv3 -p ${dockerhubpwd}'}
+                echo 'Login successfully'
+            }
+        }        
         stage('Publish docker image') {
             steps {
+                sh 'docker push ${IMAGE_TAG}'
                 echo 'Publish docker image done successfully'
             }
         }
