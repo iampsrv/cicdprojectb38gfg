@@ -24,16 +24,16 @@ jobs:
       run: |
         pytest
     
-  # build-and-push-docker-image-to-dockerhub:
-  #   runs-on: ubuntu-latest   
-  #   steps:
-  #     - name: Check out code
-  #       uses: actions/checkout@v2
+  build-and-push-docker-image-to-dockerhub:
+    runs-on: self-hosted   
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
         
-  #     - name: Build and Push docker image to docker Hub
-  #       uses: docker/build-push-action@v1
-  #       with:
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
-  #         repository: psrv3/batch35dhr
-  #         tag_with_ref: true
+      - name: Build and Push docker image to docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: psrv3/batch35dhr
+          tag_with_ref: true
